@@ -1,0 +1,18 @@
+[project]
+name = "instalily-mcp-server"
+version = "0.1.0"
+description = "MCP Platform Dev environment"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "anthropic>=0.49.0",
+    "mcp[cli]>=1.4.1",
+    "starlette>=0.46.1",
+    "uvicorn>=0.34.0",
+    "python-dotenv>=1.0.0",
+]
+
+[tool.uv.workspace]
+members = [
+    "project",
+]
