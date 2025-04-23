@@ -1,4 +1,4 @@
-# INSTALILY MCP SERVER TEMPLATE
+# INSTALILY MCP SERVER
 
 ### Installation Instructions
 

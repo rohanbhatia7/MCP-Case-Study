@@ -6,6 +6,7 @@ from mcp.server.sse import SseServerTransport
 from starlette.requests import Request
 from starlette.routing import Mount, Route
 from mcp.server import Server
+from auth import AuthMiddleware
 import uvicorn
 import os
 import dotenv
@@ -141,5 +142,8 @@ if __name__ == "__main__":
 
     # Bind SSE request handling to MCP server
     starlette_app = create_starlette_app(mcp_server, debug=True)
+
+    # Add middleware to verify authentication on each request
+    starlette_app.add_middleware(AuthMiddleware)
 
     uvicorn.run(starlette_app, host=args.host, port=args.port)
