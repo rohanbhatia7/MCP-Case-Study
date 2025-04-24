@@ -6,10 +6,11 @@ from mcp.server.sse import SseServerTransport
 from starlette.requests import Request
 from starlette.routing import Mount, Route
 from mcp.server import Server
-from auth import AuthMiddleware
 import uvicorn
 import os
 import dotenv
+from auth import AuthMiddleware
+from auth_tools import get_protected_tenant_data_factory
 
 dotenv.load_dotenv()
 
@@ -104,6 +105,7 @@ Forecast: {period['detailedForecast']}
 
     return "\n---\n".join(forecasts)
 
+get_protected_tenant_data_factory(mcp)
 
 def create_starlette_app(mcp_server: Server, *, debug: bool = False) -> Starlette:
     """Create a Starlette application that can server the provied mcp server with SSE."""
