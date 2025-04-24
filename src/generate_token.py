@@ -26,5 +26,4 @@ if __name__ == "__main__":
     user_id, role, tenant_id = sys.argv[1:4]
     token = generate_token(user_id, role, tenant_id)
     print("\nGenerated JWT:\n")
-    print(token)
-    print()
+    print(f"{token}\n")

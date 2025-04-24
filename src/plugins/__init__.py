@@ -13,7 +13,7 @@ def load_plugins(mcp):
         if filename.startswith("__") or not filename.endswith(".py"):
             continue
         
-        module_name = f"plugins.{filename[:-3]}" # drop `.py`
+        module_name = f"plugins.{filename[:-3]}"
         try:
             module = importlib.import_module(module_name)
             
