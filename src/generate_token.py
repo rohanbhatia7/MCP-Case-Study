@@ -1,9 +1,9 @@
 import jwt
 import os
 import sys
-from dotenv import load_dotenv
+import dotenv
 
-load_dotenv()
+dotenv.load_dotenv()
 
 def generate_token(user_id, role, tenant_id):
     SECRET_KEY = os.getenv("SECRET_KEY")
