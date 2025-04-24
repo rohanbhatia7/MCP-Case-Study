@@ -1,11 +1,10 @@
 import importlib
 import os
-from plugins.utils.context import current_request
+from plugins.utils.utils import current_request
 
 def load_plugins(mcp):
     """
-    Load all plugins from the plugins directory.
-    Only loads plugins that follow the BasePlugin class pattern.
+    Load all plugins from the plugins directory that have register_tool functions.
     """
     plugin_dir = os.path.dirname(__file__)
     
@@ -14,28 +13,16 @@ def load_plugins(mcp):
         if filename.startswith("__") or not filename.endswith(".py"):
             continue
         
-        module_name = f"plugins.{filename[:-3]}"  # drop `.py`
-        module = importlib.import_module(module_name)
-        
-        # Check if this is a plugin (has a BasePlugin instance)
-        plugin_instance = None
-        for attr_name in dir(module):
-            attr = getattr(module, attr_name)
-            try:
-                from plugins.utils.base_plugin import BasePlugin
-                if isinstance(attr, BasePlugin):
-                    plugin_instance = attr
-                    break
-            except ImportError:
-                pass
-        
-        if plugin_instance:
-            # Plugin found
-            if plugin_instance.validate_env():
+        module_name = f"plugins.{filename[:-3]}" # drop `.py`
+        try:
+            module = importlib.import_module(module_name)
+            
+            # Check if this module has a register_tool function
+            if hasattr(module, "register_tool"):
                 try:
-                    plugin_instance.register_tools(mcp)
-                    print(f"Loaded plugin: {plugin_instance.name} v{plugin_instance.version}")
+                    module.register_tool(mcp)
+                    print(f"Loaded plugin: {filename[:-3]}")
                 except Exception as e:
-                    print(f"Error loading plugin {plugin_instance.name}: {str(e)}")
-            else:
-                print(f"Plugin {plugin_instance.name} missing required environment variables: {plugin_instance.required_env_vars}")
+                    print(f"Error loading plugin {filename[:-3]}: {str(e)}")
+        except ImportError as e:
+            print(f"Error importing {module_name}: {str(e)}")

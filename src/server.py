@@ -16,6 +16,7 @@ dotenv.load_dotenv()
 # Initialize FastMCP server for Weather tools (SSE)
 mcp = FastMCP(os.getenv("SERVER_NAME"))
 
+# Load all plugins from the plugins directory
 load_plugins(mcp)
 
 def create_starlette_app(mcp_server: Server, *, debug: bool = False) -> Starlette:
