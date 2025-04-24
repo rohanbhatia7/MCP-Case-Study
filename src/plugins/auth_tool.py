@@ -11,7 +11,7 @@ def register_tool(mcp):
     
     @mcp.tool()
     @require_permission(Permission.QUERY_DB)
-    async def get_protected_tenant_data(resource_id: str = None) -> str:
+    async def get_protected_tenant_data(resource_id: str = "") -> str:
         """
         Access tenant-specific protected data for the authenticated user.
         

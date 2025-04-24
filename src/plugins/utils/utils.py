@@ -56,7 +56,7 @@ def can_access_resource(user, resource):
         return False
         
     # Super admins can access all resources
-    if user.get("role") == "super_admin":
+    if user.get("role") == "admin":
         return True
         
     # Users can only access resources in their tenant

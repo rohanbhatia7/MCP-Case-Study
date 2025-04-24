@@ -28,15 +28,14 @@ def register_tool(mcp):
     
     @mcp.tool()
     @require_permission(Permission.QUERY_DB)
-    async def postgres_query(query: str, params: list = None) -> str:
+    async def postgres_query(query: str) -> str:
         """
         Execute a read-only SQL query against PostgreSQL.
         
         Args:
             query: SQL query to execute (must be SELECT only)
-            params: Optional list of parameters
         """
-        # Security check - only allow SELECT queries
+        # Only allow SELECT queries for this local model
         if not query.strip().upper().startswith("SELECT"):
             return "Error: Only SELECT queries are allowed"
         
@@ -45,9 +44,8 @@ def register_tool(mcp):
         user = getattr(request.state, "user", {})
         tenant_id = user.get("tenant_id")
         
-        # Add tenant filter to query if not admin
+        # Add tenant filter to query if not admin (simple approach)
         if user.get("role") != "admin" and tenant_id:
-            # This is a simple approach - in production you'd use proper query parsing
             if "WHERE" in query.upper():
                 query += f" AND tenant_id = '{tenant_id}'"
             else:
@@ -55,12 +53,11 @@ def register_tool(mcp):
         
         pool = await get_pool()
         if not pool:
-            return "Error: Database connection failed. Make sure POSTGRES_DSN is set."
+            return "Error: Database connection failed. Make sure POSTGRES_DSN is set correctly."
         
         try:
-            # Execute query with tenant isolation
-            params = params or []
-            rows = await pool.fetch(query, *params)
+            # Execute query
+            rows = await pool.fetch(query)
             
             # Convert results to list of dicts
             result = [dict(row) for row in rows]

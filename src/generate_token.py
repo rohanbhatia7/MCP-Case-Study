@@ -20,7 +20,7 @@ def generate_token(user_id, role, tenant_id):
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        print("Usage: python generate_token.py <user_id> <role> <tenant_id>")
+        print("Usage: python3 src/generate_token.py <user_id> <role> <tenant_id>")
         sys.exit(1)
     
     user_id, role, tenant_id = sys.argv[1:4]
